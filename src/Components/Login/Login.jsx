@@ -2,10 +2,11 @@ import { useContext } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 const Login = () => {
-  const {user, signIn}= useContext(AuthContext);
+  const {signIn}= useContext(AuthContext);
 
 
   const handleLogin = event =>{
@@ -19,6 +20,14 @@ const Login = () => {
     .then(result=>{
       const user =result.user;
       console.log(user);
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "user joinUs successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
     })
 
   }

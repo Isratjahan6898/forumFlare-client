@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import Swal from "sweetalert2";
 
 
 const Register = () => {
@@ -16,6 +17,14 @@ const Register = () => {
     .then(result=>{
       const user = result.user;
       console.log(user);
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "user register successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
 
     })
   
