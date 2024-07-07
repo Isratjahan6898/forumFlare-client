@@ -1,9 +1,19 @@
 
+import { useContext } from "react";
 import { IoMdNotifications } from "react-icons/io";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 
 const Navbar = () => {
+
+  const {user, logOut}= useContext(AuthContext);
+
+  const handleLogOut = ()=>{
+    logOut()
+    .then(()=>{})
+    .catch(error=>console.log(error))
+  }
     return (
         <div className="mt-[50px] mx-[50px]">
           <div className="navbar bg-base-100">
@@ -18,13 +28,35 @@ const Navbar = () => {
       <p className="mr-[20px] font-bold text-teal-600 mt-[16px]"><a>Membership</a></p>
       <button className=" bg-inherit border-none">
        <IoMdNotifications className='text-2xl mr-[20px] mt-[16px] bg-inherit' />
-       {/* <div className="">+{cart.length}</div> */}
-       </button>
       
+       </button>
 
+
+       {
+        user ?
+        <>
+        <div className="dropdown">
+ <div  tabIndex={0} role="button">
+ <img src={user.photoURL}  alt="Tailwind"   className='rounded-full w-[30px] h-[30px]' />
+ </div>
+ <ul  tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-black rounded-box" >
+ <p className=""> <button onClick={handleLogOut} className=' bg-inherit font-bold text-teal-600'>LogOut</button></p>
+ <Link to='/deshboard'><p className="mt-[16px] mr-[20px]">desboard</p></Link>
+
+ </ul>
+
+</div>
+        </>
+        :
+        <>
         <Link to='/login'>
         <button className=" mr-[150px] bg-inherit font-bold my-[16px] text-teal-600">Join Us</button>
         </Link>
+        </>
+       }
+      
+
+        
       </ul>
     </div>
     <a className="font-bold italic text-3xl  text-teal-800">ForumFlare</a>
@@ -38,11 +70,36 @@ const Navbar = () => {
        <IoMdNotifications className='text-2xl mr-[20px] mb-[40px] bg-inherit' />
        {/* <div className="">+{cart.length}</div> */}
        </button>
+
+
+       {
+        user ?
+        <>
+        <div className="dropdown">
+ <div  tabIndex={0} role="button">
+ <img src={user.photoURL}  alt="Tailwind"   className='rounded-full  w-[30px] h-[30px]' />
+ </div>
+ <ul  tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-black rounded-box" >
+ <p className=""> <button 
+ onClick={handleLogOut}
+ 
+ className=' bg-inherit font-bold my-[16px] text-teal-600 mr-[20px]'>LogOut</button></p>
+ <Link to='/deshboard'><p className="mt-[16px]">desboard</p></Link>
+
+ </ul>
+
+</div>
+        </>
+        :
+        <>
+        <Link to='/login'>
+        <button className=" bg-inherit font-bold text-teal-600">Join Us</button>
+        </Link>
+        </>
+       }
      
 
-       <Link to='/login'>
-        <button className="mr-[20px] bg-inherit font-bold mb-[40px] text-teal-600">Join Us</button>
-        </Link>
+       
     </ul>
   </div>
 
