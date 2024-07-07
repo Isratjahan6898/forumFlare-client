@@ -1,11 +1,25 @@
 import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 
 const Register = () => {
+
+  const {creacteUser}= useContext(AuthContext);
+ 
   const { register, handleSubmit} = useForm();
-  const onSubmit = data => console.log(data);
+  const onSubmit = data => {
+    console.log(data);
+    creacteUser(data.email, data.password)
+    .then(result=>{
+      const user = result.user;
+      console.log(user);
+
+    })
+  
+  }
     return (
         <div>
             <div className="mx-[200px] my-[60px]">
