@@ -6,7 +6,22 @@ import { AuthContext } from "../../Provider/AuthProvider";
 
 const Login = () => {
   const {user, signIn}= useContext(AuthContext);
-  console.log(signIn);
+
+
+  const handleLogin = event =>{
+    event.preventDefault();
+    const form = event.target
+    const email= form.email.value;
+    const password = form.password.value;
+    console.log(email, password);
+
+    signIn(email, password)
+    .then(result=>{
+      const user =result.user;
+      console.log(user);
+    })
+
+  }
     return (
         <div className="mx-[200px] my-[60px]">
             <div
@@ -23,18 +38,20 @@ const Login = () => {
 
     
     <div>
-      <form className="card-body">
+      <form
+      onSubmit={handleLogin}
+       className="card-body">
         <div className="form-control">
           <label className="label">
             <span className="label-text text-white">Email</span>
           </label>
-          <input type="email" placeholder="email" className="input text-black input-bordered" required />
+          <input type="email" placeholder="email" name="email" className="input text-black input-bordered" required />
         </div>
         <div className="form-control">
           <label className="label">
             <span className="label-text text-white">Password</span>
           </label>
-          <input type="password" placeholder="password" className="input text-black input-bordered" required />
+          <input type="password" placeholder="password" name="password" className="input text-black input-bordered" required />
         
         </div>
         <div className="form-control mt-6">
