@@ -1,5 +1,5 @@
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
@@ -8,9 +8,13 @@ import Swal from "sweetalert2";
 
 const Register = () => {
 
-  const {creacteUser}= useContext(AuthContext);
+  const {creacteUser, updateUserProfile }= useContext(AuthContext);
+  console.log(updateUserProfile);
+  const navigate = useNavigate();
+  const location= useLocation();
+  const from = location.state?.from?.pathname || '/'
  
-  const { register, handleSubmit} = useForm();
+  const { register, handleSubmit, reset} = useForm();
   const onSubmit = data => {
     console.log(data);
     creacteUser(data.email, data.password)
@@ -18,20 +22,35 @@ const Register = () => {
       const user = result.user;
       console.log(user);
 
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "user register successfully",
-        showConfirmButton: false,
-        timer: 1500
-      });
+      updateUserProfile(data.name, data.photo)
+      .then(()=>{
+        console.log('user update info');
+        reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "user register successfully",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      })
+      .catch(error=>console.log(error))
+
+      // Swal.fire({
+      //   position: "top-end",
+      //   icon: "success",
+      //   title: "user register successfully",
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // });
+      navigate(from, {replace: true})
 
     })
   
   }
     return (
         <div>
-            <div className="mx-[200px] my-[60px]">
+            <div className="lg:mx-[200px] my-[60px]">
             <div
   className="hero min-h-screen"
   style={{
