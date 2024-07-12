@@ -8,6 +8,7 @@ import { AuthContext } from "../../../Provider/AuthProvider";
 const Navbar = () => {
 
   const {user, logOut}= useContext(AuthContext);
+  console.log(user);
 
   const handleLogOut = ()=>{
     logOut()
@@ -37,7 +38,8 @@ const Navbar = () => {
         <>
         <div className="dropdown">
  <div  tabIndex={0} role="button">
- <img src={user.photoURL}  alt="Tailwind"   className='rounded-full w-[30px] h-[30px]' />
+ <img src={user.
+      photoURL}  alt="Tailwind"   className='rounded-full w-[30px] h-[30px]' />
  </div>
  <ul  tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-black rounded-box" >
  <p className=""> <button onClick={handleLogOut} className=' bg-inherit font-bold text-teal-600'>LogOut</button></p>
@@ -80,11 +82,12 @@ const Navbar = () => {
  <img src={user.photoURL}  alt="Tailwind"   className='rounded-full  w-[30px] h-[30px]' />
  </div>
  <ul  tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 text-black rounded-box" >
+  <p className="text-teal-600 mr-[20px]">{user.displayName}</p>
  <p className=""> <button 
  onClick={handleLogOut}
  
- className=' bg-inherit font-bold my-[16px] text-teal-600 mr-[20px]'>LogOut</button></p>
- <Link to='/deshboard'><p className="mt-[16px]">desboard</p></Link>
+ className=' bg-inherit font-bold text-teal-600 mr-[20px]'>LogOut</button></p>
+ <Link to='/deshboard'><p className="mt-[16px] font-bold text-teal-600">desboard</p></Link>
 
  </ul>
 

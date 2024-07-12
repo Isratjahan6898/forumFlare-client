@@ -6,7 +6,8 @@ import Swal from "sweetalert2";
 
 
 const Login = () => {
-  const {signIn}= useContext(AuthContext);
+  const {signIn, signInWithGoogle, user}= useContext(AuthContext);
+  console.log(user);
 
   const navigate = useNavigate();
   const location= useLocation();
@@ -37,6 +38,23 @@ const Login = () => {
     })
 
   }
+
+  const handleGoogleLogin = ()=>{
+    signInWithGoogle()
+    .then(result=>{
+     const user = result.user;
+     console.log(user);
+     Swal.fire({
+       position: "top-end",
+       icon: "success",
+       title: "user register successfully",
+       showConfirmButton: false,
+       timer: 1500
+     });
+     navigate(from, {replace: true})
+    }) 
+    .catch(error=>console.log(error))   
+ }
     return (
         <div className="lg:mx-[200px] my-[60px]">
             <div
@@ -76,7 +94,10 @@ const Login = () => {
 
       <div>
         <h1>Continue With</h1>
-        <button><FcGoogle className="text-4xl" /></button>
+        <button><FcGoogle
+        onClick={handleGoogleLogin}
+        
+        className="text-4xl" /></button>
       </div>
       <div>You have not account plz <span className="text-teal-400 font-bold"><Link to='/register'>Register</Link></span></div>
     </div>

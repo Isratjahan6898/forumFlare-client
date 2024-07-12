@@ -5,18 +5,38 @@ import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 
+import axios from "axios";
+
+
+// const image_hosting_key = import.meta.env.VITE_API_IMAGE_HOSTING;
+// const image_hosting_api= `https://api.imgbb.com/1/upload?key=${image_hosting_key}`
+
+const image_hosting_key = import.meta.env.VITE_API_IMAGE_HOSTING;
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 
 const Register = () => {
+  // const axiosCommon= useAxiosCommon();
 
-  const {creacteUser, updateUserProfile }= useContext(AuthContext);
-  console.log(updateUserProfile);
+  const {creacteUser, updateUserProfile,  signInWithGoogle, user }= useContext(AuthContext);
+  console.log(user);
   const navigate = useNavigate();
   const location= useLocation();
   const from = location.state?.from?.pathname || '/'
  
   const { register, handleSubmit, reset} = useForm();
-  const onSubmit = data => {
+  const onSubmit =async (data) => {
     console.log(data);
+
+    
+    const formData = new FormData();
+      formData.append('image', data.image[0]); // Assuming 'image' is the name of your file input field
+
+      // Upload image to imgbb
+      const res = await axios.post(image_hosting_api, formData);
+      
+      console.log('Image URL:', res.data.data.display_url);
+
     creacteUser(data.email, data.password)
     .then(result=>{
       const user = result.user;
@@ -34,19 +54,29 @@ const Register = () => {
           timer: 1500
         });
       })
-      .catch(error=>console.log(error))
+      // .catch(error=>console.log(error))
 
-      // Swal.fire({
-      //   position: "top-end",
-      //   icon: "success",
-      //   title: "user register successfully",
-      //   showConfirmButton: false,
-      //   timer: 1500
-      // });
       navigate(from, {replace: true})
 
     })
   
+  }
+
+  const handleGoogleLogin = ()=>{
+     signInWithGoogle()
+     .then(result=>{
+      const user = result.user;
+      console.log(user);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "user register successfully",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      navigate(from, {replace: true})
+     }) 
+     .catch(error=>console.log(error))   
   }
     return (
         <div>
@@ -81,7 +111,9 @@ const Register = () => {
           <label className="label">
             <span className="label-text text-white">Photo URL</span>
           </label>
-          <input type="text" name="photo" {...register("photo")} placeholder="photo url" className="input text-black input-bordered" required />
+          {/* <input type="text" name="photo" {...register("photo")} placeholder="photo url" className="input text-black input-bordered" required /> */}
+
+          <input type="file" name="photo" {...register("image")} className="file-input file-input-bordered file-input-accent w-full max-w-xs" />
         </div>
         <div className="form-control">
           <label className="label">
@@ -103,7 +135,7 @@ const Register = () => {
 
       <div>
         <h1>Continue With</h1>
-        <button><FcGoogle className="text-4xl" /></button>
+        <button><FcGoogle onClick={handleGoogleLogin} className="text-4xl" /></button>
       </div>
       <div>If you have already account plz <span className="text-teal-400 font-bold"><Link to='/login'>Join Us</Link></span></div>
     </div>
