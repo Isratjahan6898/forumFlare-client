@@ -37,29 +37,52 @@ const Register = () => {
       
       console.log('Image URL:', res.data.data.display_url);
 
-    creacteUser(data.email, data.password)
-    .then(result=>{
-      const user = result.user;
-      console.log(user);
+      const imageUrl = res.data.data.display_url;
 
-      updateUserProfile(data.name, data.photo)
-      .then(()=>{
-        console.log('user update info');
-        reset();
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "user register successfully",
-          showConfirmButton: false,
-          timer: 1500
-        });
-      })
-      // .catch(error=>console.log(error))
-
-      navigate(from, {replace: true})
-
-    })
+      creacteUser(data.email, data.password)
+      .then(result => {
+          const user = result.user;
+          console.log(user);
   
+          updateUserProfile(data.name, imageUrl)
+          .then(() => {
+              console.log('user update info');
+              
+              // Prepare user data to save in database
+              const savedUser = {
+                  name: data.name,
+                  email: data.email,
+                  image: imageUrl,
+                  role: 'user',
+                  badge: 'Bronze Badge'
+              };
+  
+              // Send user data to the server
+              axios.post('http://localhost:5000/users', savedUser)
+              .then(response => {
+                  console.log('User saved:', response.data);
+                  reset();
+                  Swal.fire({
+                      position: "top-end",
+                      icon: "success",
+                      title: "user registered successfully",
+                      showConfirmButton: false,
+                      timer: 1500
+                  });
+              })
+              .catch(error => {
+                  console.error('Error saving user:', error);
+              });
+  
+              navigate(from, { replace: true });
+          })
+          .catch(error => {
+              console.log(error);
+          });
+      })
+      .catch(error => {
+          console.error('Error creating user:', error);
+      });
   }
 
   const handleGoogleLogin = ()=>{
